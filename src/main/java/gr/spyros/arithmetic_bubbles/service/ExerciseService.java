@@ -78,4 +78,8 @@ public class ExerciseService {
 
         return exerciseMapper.convertToDto(exerciseRepository.save(exercise));
     }
+
+    public void updateDateFinished(long id, LocalDateTime dateFinished) {
+        exerciseRepository.updateDateFinished(id, dateFinished);
+    }
 }

@@ -17,6 +17,7 @@ public class Question {
     private Exercise exercise;
 
     private int result;
+    private Integer answerGiven;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
@@ -62,5 +63,13 @@ public class Question {
 
     public void setMembers(List<Member> members) {
         this.members = members;
+    }
+
+    public Integer getAnswerGiven() {
+        return answerGiven;
+    }
+
+    public void setAnswerGiven(Integer answerGiven) {
+        this.answerGiven = answerGiven;
     }
 }

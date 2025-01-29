@@ -18,6 +18,9 @@ public class Exercise {
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.PERSIST)
     private List<Question> questions = new ArrayList<>();
 
+    @ManyToOne
+    private User user;
+
     public Long getId() {
         return id;
     }
@@ -48,5 +51,13 @@ public class Exercise {
 
     public void setDateFinished(LocalDateTime dateFinished) {
         this.dateFinished = dateFinished;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

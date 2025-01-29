@@ -12,15 +12,21 @@ import gr.spyros.arithmetic_bubbles.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AnswerService {
 
     private final ExerciseRepository exerciseRepository;
     private final AnswerRepository answerRepository;
+    private final QuestionService questionService;
+    private final ExerciseService exerciseService;
 
-    public AnswerService(ExerciseRepository exerciseRepository, AnswerRepository answerRepository) {
+    public AnswerService(ExerciseRepository exerciseRepository, AnswerRepository answerRepository, QuestionService questionService, ExerciseService exerciseService) {
         this.exerciseRepository = exerciseRepository;
         this.answerRepository = answerRepository;
+        this.questionService = questionService;
+        this.exerciseService = exerciseService;
     }
 
     @Transactional
@@ -46,6 +52,7 @@ public class AnswerService {
             QuestionFeedback questionFeedback = new QuestionFeedback();
             questionFeedback.setId(question.getId());
             questionFeedback.setAnswerGiven(answerGiven.getResult());
+            questionService.updateAnswer(question.getId(), answerGiven.getResult());
 
             Answer correctAnswer = question.getAnswers().stream().filter(Answer::isCorrect).findFirst().orElse(new Answer());
             questionFeedback.setAnswerCorrect(correctAnswer.getResult());
@@ -66,6 +73,10 @@ public class AnswerService {
         exerciseFeedback.setNumberOfIncorrectAnswers(numberOfIncorrectAnswers);
         exerciseFeedback.setNumberOfQuestions(numberOfAnswers);
         exerciseFeedback.setPercentageCorrect((float) (100 * numberOfCorrectAnswers) / numberOfAnswers);
+
+        LocalDateTime dateFinished = LocalDateTime.now();
+        exerciseFeedback.setDateFinished(dateFinished);
+        exerciseService.updateDateFinished(exercise.getId(), dateFinished);
 
         return exerciseFeedback;
     }
